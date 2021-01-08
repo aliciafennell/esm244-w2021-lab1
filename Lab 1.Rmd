@@ -1,0 +1,56 @@
+---
+title: "Lab 1"
+author: "Alicia Fennell"
+date: "1/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(tmap)
+library(sf)
+```
+
+R markdown combines formatted text and code and outputs! Great for reproducibility - less opportunities for mistakes.
+
+First we attach packages (in the code chunk above)
+
+If you need to install package: go to the console, type install.packages("packagename")
+
+Read in data (command option i for code chunk)
+(command enter runs code)
+
+# largest header
+###### smallest header 
+
+```{r}
+sf_trees <- read_csv(here("data", "sf_trees", "sf_trees.csv"))
+
+  
+```
+
+##Basic wrangling reminders
+
+refresh data wrangling skills! 
+
+Find top 5 highest observations of trees by legal status, then do some wrangling and make a graph. 
+
+(command shift M is pipe operator)
+
+```{r}
+top_5_status <- sf_trees %>% 
+  count(legal_status) %>% 
+  drop_na(legal_status) %>% 
+  rename(tree_count = n) %>% 
+  relocate(tree_count) %>% 
+  slice_max(tree_count, n= 5)
+
+## count basically combines group by, n, summarize functions. super useful
+##drop_na removes any rows that contain a missing or na value for the variable you specify 
+# rename - new name goes first, then old name 
+# relocate: tree_count moves to the first column 
+#slice_max allows you to ID the rows with highest values for variable that you specify, and then only keeps top ## 
+```
+
