@@ -54,3 +54,45 @@ top_5_status <- sf_trees %>%
 #slice_max allows you to ID the rows with highest values for variable that you specify, and then only keeps top ## 
 ```
 
+Make a graph of top 5 observations by legal status 
+
+```{r}
+ggplot(data = top_5_status, aes(x = fct_reorder(legal_status, tree_count), y = tree_count)) +
+  geom_col() +
+  labs(x = "Legal Status", y = "Tree Count", title = "Test Title") +
+  coord_flip() +
+  theme_minimal()
+  
+```
+A few more data wrangling refresher examples!!
+
+Only want to keep observations (rows) for blackwood acacia trees
+- no separate column for scientific and common names... but we can look for everything that contains "blackwood acacia" using filter. 
+
+```{r}
+blackwood <- sf_trees %>% 
+  filter(str_detect(species, "Blackwood Acacia")) %>% 
+  select(legal_status, date, latitude, longitude)
+
+ggplot(data = blackwood, aes(x = longitude, y = latitude)) +
+  geom_point()
+
+
+##string detect (str_detect) looks for a string within a variable that we specify 
+# select helps us pick columns 
+```
+Use tidyr :: separate and unite functions. useful for combining or separating columns 
+
+```{r}
+sf_trees_sep <- sf_trees %>% 
+  separate(species, into = c("spp_sci", "spp_common"), sep = "::")
+
+```
+
+Example of unite... (not sure why we'd do this!)
+
+```{r}
+sf_trees_unite <- sf_trees %>% 
+  unite("id_status", tree_id:legal_status, sep = "!!!!!")
+```
+
